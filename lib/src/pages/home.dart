@@ -5,10 +5,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
+      backgroundColor: Colors.grey[150],
       appBar: AppBar(
-        title: Text('Inicio'),
-        backgroundColor: Colors.green[100],
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
       drawer: _menuLateral(),
@@ -54,7 +54,7 @@ class _menuLateral extends StatelessWidget {
               backgroundColor: Colors.transparent,
               child: ClipOval(
                 child: Image.network(
-                  'https://scontent.fhmo1-1.fna.fbcdn.net/v/t31.0-8/1025379_10202155040903663_1940833829751738118_o.jpg?_nc_cat=101&ccb=2&_nc_sid=174925&_nc_eui2=AeFszBLnYoGvfqYJjTLZjEb_pAwF8_t2n8mkDAXz-3afyUoSiWzzkFl7lFtCacYFEp8j6gM-_vU3LslTkNl84eFj&_nc_ohc=c0nxARLkJ4gAX9WLo8x&_nc_ht=scontent.fhmo1-1.fna&oh=b519bb413dc4d951dbd01e63f8c81cba&oe=6027DF34',
+                  'https://image.freepik.com/vector-gratis/perfil-empresario-dibujos-animados_18591-58479.jpg',
                   height: 120,
                   width: 120,
                   fit: BoxFit.cover,

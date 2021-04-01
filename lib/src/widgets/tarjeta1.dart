@@ -36,7 +36,8 @@ class cardTipo1 extends StatelessWidget {
                   children: [
                     Text(
                       'Instituto Tecnologico de Hermosillo',
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '10 de enero de 2021',
@@ -118,7 +119,7 @@ Widget cardTipo2() {
                 children: [
                   Text(
                     'Carlos Arce',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '10 de enero de 2021',
