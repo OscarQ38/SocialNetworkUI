@@ -1,5 +1,7 @@
+import 'package:aseith_app/src/helpers/mostrar_alerta.dart';
 import 'package:flutter/material.dart';
-import 'package:aseith_app/src/providers/login_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:aseith_app/src/providers/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   final emailController = TextEditingController();
@@ -50,7 +52,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 30.0),
                 _crearPass(),
                 SizedBox(height: 30.0),
-                _crearBoton(),
+                _crearBoton(context),
               ],
             ),
           ),
@@ -103,7 +105,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _crearBoton() {
+  Widget _crearBoton(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return RaisedButton(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
@@ -112,11 +115,19 @@ class LoginPage extends StatelessWidget {
       color: Color.fromRGBO(78, 108, 200, 1.0),
       textColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      onPressed: () {
+      onPressed: authService.autenticando ? null: () async {
         String email = emailController.text;
         String password = passwordController.text;
-        print(email + password);
-        authProvider().login(email, password);
+        
+        FocusScope.of(context).unfocus();
+
+        final loginOk = await authService.login(email, password);
+        
+        if(loginOk){
+          Navigator.pushReplacementNamed(context, '/');
+        } else {
+          mostrarAlerta(context, "Login incorrecto", "Sucedio un error");
+        }
       },
     );
   }

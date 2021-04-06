@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:aseith_app/src/pages/home.dart';
 import 'package:aseith_app/src/pages/login_page.dart';
@@ -11,17 +12,20 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'App ITH',
-      debugShowCheckedModeBanner: false,
-      initialRoute: 'register',
-      routes: {
-        '/': (BuildContext context) => HomePage(),
-        'detalle': (BuildContext context) => TarjetaDetalle(),
-        'perfil': (BuildContext context) => Perfil(),
-        'login': (BuildContext context) => LoginPage(),
-        'register': (BuildContext context) => RegisterPage(),
-      },
+    return MultiProvider(
+      providers: [],
+      child: MaterialApp(
+        title: 'App ITH',
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'login',
+        routes: {
+          '/': (BuildContext context) => HomePage(),
+          'detalle': (BuildContext context) => TarjetaDetalle(),
+          'perfil': (BuildContext context) => Perfil(),
+          'login': (BuildContext context) => LoginPage(),
+          'register': (BuildContext context) => RegisterPage(),
+        },
+      ),
     );
   }
 }
