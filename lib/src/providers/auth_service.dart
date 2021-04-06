@@ -78,6 +78,28 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateUser(Usuario usuario) async {
+    final token = await this._storage.read(key: 'token');
+
+    var url = Uri.https(apiUrl, '/auth/update');
+
+    final resp = await http.put(
+      url,
+      body: usuario.toJson(),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': token
+      }
+    );
+
+    if (resp.statusCode == 200) {
+      //Todo: Guardar nuevo usuario en la variable global
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
 
