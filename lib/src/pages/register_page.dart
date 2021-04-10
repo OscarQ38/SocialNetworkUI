@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:aseith_app/src/providers/auth_provider.dart';
-
 class RegisterPage extends StatelessWidget {
   final nombreCompletoController = TextEditingController();
   final numControlController = TextEditingController();
@@ -175,7 +173,6 @@ class RegisterPage extends StatelessWidget {
         String password = passwordController.text;
         int noControl = numControlController.hashCode;
         // print(nombreCompleto + email + password);
-        registerProvider().register(email, password, nombreCompleto, noControl);
       },
     );
   }

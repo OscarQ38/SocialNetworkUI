@@ -1,3 +1,4 @@
+import 'package:aseith_app/src/providers/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [],
+      providers: [
+        ChangeNotifierProvider(create: ( _ ) => AuthService())
+      ],
       child: MaterialApp(
         title: 'App ITH',
         debugShowCheckedModeBanner: false,
