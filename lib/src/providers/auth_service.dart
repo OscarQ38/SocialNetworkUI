@@ -51,19 +51,18 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password, String nombreCompleto,
-      int noControl) async {
-    final data = {
-      "email": email,
-      "password": password,
-      "nombreCompleto": nombreCompleto,
-      "noControl": noControl
-    };
+  Future<bool> register(Usuario usuario) async {
+    // final data = {
+    //   "email": email,
+    //   "password": password,
+    //   "nombreCompleto": nombreCompleto,
+    //   "noControl": noControl
+    // };
 
     var url = Uri.https(apiUrl, '/auth/new');
 
     final resp = await http.post(url,
-        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
+        body: usuario.toJson(), headers: {'Content-Type': 'application/json'});
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);

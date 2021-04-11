@@ -1,4 +1,5 @@
 import 'package:aseith_app/src/helpers/mostrar_alerta.dart';
+import 'package:aseith_app/src/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aseith_app/src/providers/auth_service.dart';
@@ -118,7 +119,7 @@ class LoginPage extends StatelessWidget {
       onPressed: authService.autenticando ? null: () async {
         String email = emailController.text;
         String password = passwordController.text;
-        
+
         FocusScope.of(context).unfocus();
 
         final loginOk = await authService.login(email, password);
