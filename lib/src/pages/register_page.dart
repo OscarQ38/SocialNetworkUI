@@ -1,11 +1,13 @@
+import 'package:aseith_app/src/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:aseith_app/src/helpers/mostrar_alerta.dart';
 import 'package:aseith_app/src/providers/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
-  final nombreCompletoController = TextEditingController();
-  final numControlController = TextEditingController();
+  final nombreController = TextEditingController();
+  final apellidoPController = TextEditingController();
+  final apellidoMController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -50,16 +52,18 @@ class RegisterPage extends StatelessWidget {
                   style: TextStyle(fontSize: 20.0),
                 ),
                 SizedBox(height: 30.0),
-                _nombreCompleto(),
+                _nombre(),
                 SizedBox(height: 25.0),
+                _apellidoPa(),
+                SizedBox(height: 30.0),
+                _apellidoMa(),
+                SizedBox(height: 30.0),
                 _crearEmail(),
                 SizedBox(height: 25.0),
                 _crearPass(),
                 SizedBox(height: 25.0),
                 _confirmarPass(),
                 SizedBox(height: 25.0),
-                _numeroControl(),
-                SizedBox(height: 30.0),
                 _crearBoton(context),
               ],
             ),
@@ -126,44 +130,62 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _nombreCompleto() {
+  Widget _nombre() {
     return Container(
       padding: EdgeInsets.only(right: 30.0, left: 20.0),
       child: TextField(
-        controller: nombreCompletoController,
+        controller: nombreController,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(
           icon: Icon(
             Icons.person,
             color: Colors.blue,
           ),
-          hintText: 'Nombre completo',
-          labelText: 'Nombre completo',
+          hintText: 'Nombre ',
+          labelText: 'Nombre ',
         ),
       ),
     );
   }
 
-  Widget _numeroControl() {
+  Widget _apellidoPa() {
     return Container(
       padding: EdgeInsets.only(right: 30.0, left: 20.0),
       child: TextField(
-        controller: numControlController,
-        keyboardType: TextInputType.number,
+        controller: apellidoPController,
+        keyboardType: TextInputType.name,
         decoration: InputDecoration(
           icon: Icon(
-            Icons.vpn_key,
+            Icons.person,
             color: Colors.blue,
           ),
-          hintText: 'Numero de control',
-          labelText: 'Numero de control',
+          hintText: 'apellido Paterno ',
+          labelText: 'apellido Paterno ',
+        ),
+      ),
+    );
+  }
+
+  Widget _apellidoMa() {
+    return Container(
+      padding: EdgeInsets.only(right: 30.0, left: 20.0),
+      child: TextField(
+        controller: apellidoMController,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          icon: Icon(
+            Icons.person,
+            color: Colors.blue,
+          ),
+          hintText: 'apellido Materno ',
+          labelText: 'apellido Materno ',
         ),
       ),
     );
   }
 
   Widget _crearBoton(context) {
-    final registerProvider = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthService>(context);
     return RaisedButton(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
@@ -172,18 +194,28 @@ class RegisterPage extends StatelessWidget {
       color: Color.fromRGBO(78, 108, 200, 1.0),
       textColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      onPressed: registerProvider.autenticando
+      onPressed: authService.autenticando
           ? null
           : () async {
-              String nombreCompleto = nombreCompletoController.text;
+              String nombre = nombreController.text.trim();
+              String apellidoP = apellidoPController.text.trim();
+              String apellidoM = apellidoMController.text.trim();
               String email = emailController.text;
               String password = passwordController.text;
-              int noControl = numControlController.hashCode;
+
               // print(nombreCompleto + email + password);
               //registerProvider().register(email, password, nombreCompleto, noControl);
 
-              final registerOk = await registerProvider.register(
-                  email, password, nombreCompleto, noControl);
+              Usuario usuario = new Usuario(
+                nombre: nombre,
+                apellidoPaterno: apellidoP,
+                apellidoMaterno: apellidoM,
+                nombreCompleto: nombre + ' ' + apellidoP + ' ' + apellidoM,
+                email: email,
+                password: password,
+              );
+
+              final registerOk = await authService.register(usuario);
               if (registerOk) {
                 Navigator.pushReplacementNamed(context, '/');
               } else {

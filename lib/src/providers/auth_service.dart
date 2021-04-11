@@ -33,15 +33,19 @@ class AuthService extends ChangeNotifier {
   Future<bool> login(String email, String password) async {
     final data = {"email": email, "password": password};
 
-    var url = Uri.https(apiUrl, '/auth/login');
+    var url = Uri.parse(apiUrl + '/auth/');
 
     final resp = await http.post(url,
         body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
 
+    print(resp.body);
+
+    print(resp.statusCode);
+
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario.nombre = loginResponse.nombre;
-      this.usuario.uid = loginResponse.uid;
+      this.usuario =
+          new Usuario(uid: loginResponse.uid, nombre: loginResponse.nombre);
 
       await _guardarToken(loginResponse.token);
 
@@ -59,15 +63,19 @@ class AuthService extends ChangeNotifier {
     //   "noControl": noControl
     // };
 
-    var url = Uri.https(apiUrl, '/auth/new');
+    var url = Uri.parse(apiUrl + '/auth/new');
+
+    print(usuario.toJson());
 
     final resp = await http.post(url,
-        body: usuario.toJson(), headers: {'Content-Type': 'application/json'});
-
-    if (resp.statusCode == 200) {
+        body: usuarioToJson(usuario),
+        headers: {'Content-Type': 'application/json'});
+    if (resp.statusCode == 201) {
       final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario.nombre = loginResponse.nombre;
-      this.usuario.uid = loginResponse.uid;
+      this.usuario =
+          new Usuario(uid: loginResponse.uid, nombre: loginResponse.nombre);
+      // this.usuario.nombre = loginResponse.nombre;
+      // this.usuario.uid = loginResponse.uid;
 
       await _guardarToken(loginResponse.token);
 
@@ -82,14 +90,9 @@ class AuthService extends ChangeNotifier {
 
     var url = Uri.https(apiUrl, '/auth/update');
 
-    final resp = await http.put(
-      url,
-      body: usuario.toJson(),
-      headers: {
-        'Content-Type': 'application/json',
-        'x-token': token
-      }
-    );
+    final resp = await http.put(url,
+        body: usuario.toJson(),
+        headers: {'Content-Type': 'application/json', 'x-token': token});
 
     if (resp.statusCode == 200) {
       //Todo: Guardar nuevo usuario en la variable global
@@ -115,7 +118,6 @@ class AuthService extends ChangeNotifier {
   Future _guardarToken(String token) async {
     return await _storage.write(key: 'token', value: token);
   }
-
 }
 
 // print(login(usuario));

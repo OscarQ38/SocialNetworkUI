@@ -14,13 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: ( _ ) => AuthService())
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => AuthService())],
       child: MaterialApp(
         title: 'App ITH',
         debugShowCheckedModeBanner: false,
-        initialRoute: 'perfil',
+        initialRoute: 'login',
         routes: {
           '/': (BuildContext context) => HomePage(),
           'detalle': (BuildContext context) => TarjetaDetalle(),
