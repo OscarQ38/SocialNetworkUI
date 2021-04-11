@@ -38,10 +38,6 @@ class AuthService extends ChangeNotifier {
     final resp = await http.post(url,
         body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
 
-    print(resp.body);
-
-    print(resp.statusCode);
-
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
       this.usuario =
@@ -56,16 +52,8 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<bool> register(Usuario usuario) async {
-    // final data = {
-    //   "email": email,
-    //   "password": password,
-    //   "nombreCompleto": nombreCompleto,
-    //   "noControl": noControl
-    // };
 
     var url = Uri.parse(apiUrl + '/auth/new');
-
-    print(usuario.toJson());
 
     final resp = await http.post(url,
         body: usuarioToJson(usuario),
@@ -74,8 +62,6 @@ class AuthService extends ChangeNotifier {
       final loginResponse = loginResponseFromJson(resp.body);
       this.usuario =
           new Usuario(uid: loginResponse.uid, nombre: loginResponse.nombre);
-      // this.usuario.nombre = loginResponse.nombre;
-      // this.usuario.uid = loginResponse.uid;
 
       await _guardarToken(loginResponse.token);
 
@@ -104,19 +90,35 @@ class AuthService extends ChangeNotifier {
 
   Future<bool> isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
+  
+    var url = Uri.parse(apiUrl + '/renew');
 
-    return true;
+    final resp = await http.post( url,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': token
+      }
+    );
+    
+    if( resp.statusCode == 200 ) {
+      final loginResponse = loginResponseFromJson( resp.body );
+      this.usuario = new Usuario (uid: loginResponse.uid);
 
-    //TODO: aplicar condicion para saber si esta logeado
-    // if (token) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
+      await this._guardarToken(loginResponse.token);
+      
+      return true;
+    } else {
+      this.logout();
+      return false;
+    }
   }
 
   Future _guardarToken(String token) async {
     return await _storage.write(key: 'token', value: token);
+  }
+
+  Future logout() async {
+    await _storage.delete(key: 'token');
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:aseith_app/src/pages/loading_page.dart';
 import 'package:aseith_app/src/providers/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +19,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'App ITH',
         debugShowCheckedModeBanner: false,
-        initialRoute: 'login',
+        initialRoute: 'loading',
         routes: {
           '/': (BuildContext context) => HomePage(),
           'detalle': (BuildContext context) => TarjetaDetalle(),
           'perfil': (BuildContext context) => Perfil(),
+          'loading': (BuildContext context) => LoadingPage(),
           'login': (BuildContext context) => LoginPage(),
           'register': (BuildContext context) => RegisterPage(),
         },
