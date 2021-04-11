@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'App ITH',
         debugShowCheckedModeBanner: false,
-        initialRoute: 'login',
+        initialRoute: 'perfil',
         routes: {
           '/': (BuildContext context) => HomePage(),
           'detalle': (BuildContext context) => TarjetaDetalle(),

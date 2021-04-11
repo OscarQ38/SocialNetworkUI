@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:aseith_app/src/providers/auth_provider.dart';
+import 'package:aseith_app/src/helpers/mostrar_alerta.dart';
+import 'package:aseith_app/src/providers/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   final nombreCompletoController = TextEditingController();
@@ -58,7 +60,7 @@ class RegisterPage extends StatelessWidget {
                 SizedBox(height: 25.0),
                 _numeroControl(),
                 SizedBox(height: 30.0),
-                _crearBoton(),
+                _crearBoton(context),
               ],
             ),
           ),
@@ -160,7 +162,8 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _crearBoton() {
+  Widget _crearBoton(context) {
+    final registerProvider = Provider.of<AuthService>(context);
     return RaisedButton(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
@@ -169,14 +172,25 @@ class RegisterPage extends StatelessWidget {
       color: Color.fromRGBO(78, 108, 200, 1.0),
       textColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      onPressed: () {
-        String nombreCompleto = nombreCompletoController.text;
-        String email = emailController.text;
-        String password = passwordController.text;
-        int noControl = numControlController.hashCode;
-        // print(nombreCompleto + email + password);
-        registerProvider().register(email, password, nombreCompleto, noControl);
-      },
+      onPressed: registerProvider.autenticando
+          ? null
+          : () async {
+              String nombreCompleto = nombreCompletoController.text;
+              String email = emailController.text;
+              String password = passwordController.text;
+              int noControl = numControlController.hashCode;
+              // print(nombreCompleto + email + password);
+              //registerProvider().register(email, password, nombreCompleto, noControl);
+
+              final registerOk = await registerProvider.register(
+                  email, password, nombreCompleto, noControl);
+              if (registerOk) {
+                Navigator.pushReplacementNamed(context, '/');
+              } else {
+                mostrarAlerta(
+                    context, "registro incorrecto", "Sucedio un error");
+              }
+            },
     );
   }
 
